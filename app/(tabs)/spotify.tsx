@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 const logo = require('../../assets/images/spotify-logo--.png');
+
+export const options = {
+  headerShown: false,
+};
 
 export default function SpotifyLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const handleLogin = () => {
     alert(`Logging in with\nEmail: ${email}\nPassword: ${password}`);
+    // Later, navigate to homepage after login:
+    // router.replace('/homePage');
   };
 
   return (
@@ -17,17 +25,13 @@ export default function SpotifyLogin() {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      {/* Logo + Brand */}
+      {/* */}
       <View style={styles.header}>
-        <Image
-          source={logo}
-          style={styles.logo}
-          resizeMode="contain"
-        />
+        <Image source={logo} style={styles.logo} resizeMode="contain" />
         <Text style={styles.brand}>Spotify</Text>
       </View>
 
-      {/* Input Fields */}
+      {/* */}
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Username"
@@ -48,18 +52,18 @@ export default function SpotifyLogin() {
           secureTextEntry
         />
 
-        {/* Forgot Password */}
+        {/* */}
         <TouchableOpacity>
           <Text style={styles.forgotPassword}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Login Button */}
+      {/*  */}
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>Sign in</Text>
       </TouchableOpacity>
 
-      {/* Be Connect With */}
+      {/*  */}
       <Text style={styles.connectText}>Be connect with</Text>
       <View style={styles.socialContainer}>
         <TouchableOpacity>
@@ -70,10 +74,10 @@ export default function SpotifyLogin() {
         </TouchableOpacity>
       </View>
 
-      {/* Signup Link */}
+      {/*  */}
       <View style={styles.signupContainer}>
         <Text style={{ color: '#b3b3b3' }}>Don't have an account? </Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/signup')}>
           <Text style={styles.signupText}>Sign up for Spotify</Text>
         </TouchableOpacity>
       </View>
