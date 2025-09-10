@@ -4,9 +4,10 @@ import { useEffect } from 'react';
 export default function Index() {
   const router = useRouter();
 
-  useEffect(() => {
-    router.replace('/homePage'); // Always go to homepage
-  }, []);
+useEffect(() => {
+  // By default, go to login page first
+  router.replace('/spotify');
+}, []);
 
   return null;
 }

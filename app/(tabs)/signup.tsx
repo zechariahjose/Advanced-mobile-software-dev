@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Image } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { Image, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const logo = require('../../assets/images/spotify-logo--.png');
 
@@ -16,12 +16,6 @@ export default function Signup() {
   const [dob, setDob] = useState({ day: '', month: '', year: '' });
   const [gender, setGender] = useState('');
   const router = useRouter();
-
-  const handleSignup = () => {
-    alert(`Signing up with\nEmail: ${email}\nName: ${fullname}\nDOB: ${dob.day}-${dob.month}-${dob.year}\nGender: ${gender}`);
-    // Later, navigate to homepage after signup:
-    // router.replace('/homePage');
-  };
 
   return (
     <KeyboardAvoidingView
@@ -112,8 +106,8 @@ export default function Signup() {
         </View>
       </View>
 
-      {/* Signup Button */}
-      <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
+      {/* Signup Button → goes directly to homepage */}
+      <TouchableOpacity style={styles.signupButton} onPress={() => router.replace('/homePage')}>
         <Text style={styles.signupButtonText}>Sign up</Text>
       </TouchableOpacity>
 
