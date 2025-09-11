@@ -16,7 +16,7 @@ export default function Settings() {
         { 
           text: "Log Out", 
           style: "destructive", 
-          onPress: () => router.replace('/spotify')  // ✅ direct to Login screen
+          onPress: () => router.replace('/Home/spotify')  // ✅ correct path
         }
       ]
     );

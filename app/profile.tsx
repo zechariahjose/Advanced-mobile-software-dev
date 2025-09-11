@@ -5,7 +5,7 @@ const user = {
   email: "zechariahjose@email.com",
   followers: 120,
   following: 80,
-  avatar: "https://i.pravatar.cc/150?img=12",
+  avatar: "https://placedog.net/500/500?id=3",
 };
 
 export default function Profile() {

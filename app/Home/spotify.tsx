@@ -67,8 +67,8 @@ export default function SpotifyLogin() {
       </View>
 
       <View style={styles.signupContainer}>
-        <Text style={{ color: '#b3b3b3' }}>Don't have an account? </Text>
-        <TouchableOpacity onPress={() => router.push('/signup')}>
+        <Text style={{ color: '#b3b3b3' }}>Don't have an account? </Text>d
+        <TouchableOpacity onPress={() => router.push('/Home/signup')}>
           <Text style={styles.signupText}>Sign up for Spotify</Text>
         </TouchableOpacity>
       </View>
