@@ -5,22 +5,75 @@ import { ThemeState } from '../store/themeSlice';
 const user = {
   name: "Zechariah Jose Refugio",
   email: "zechariahjose@email.com",
-  followers: 120,
-  following: 80,
-  avatar: "https://via.placeholder.com/150x150/1DB954/FFFFFF?text=ZJ",
+  followers: 12,
+  following: 5,
+  avatar: "https://via.placeholder.com/200x200/1DB954/FFFFFF?text=ZJ",
   isPremium: true,
   country: "Philippines",
   joinDate: "2020",
 };
 
-const topArtists = [
-  { id: '1', name: 'The Weeknd', image: 'https://via.placeholder.com/100x100/1DB954/FFFFFF?text=TW' },
-  { id: '2', name: 'Drake', image: 'https://via.placeholder.com/100x100/1DB954/FFFFFF?text=D' },
-  { id: '3', name: 'Billie Eilish', image: 'https://via.placeholder.com/100x100/1DB954/FFFFFF?text=BE' },
-  { id: '4', name: 'Ed Sheeran', image: 'https://via.placeholder.com/100x100/1DB954/FFFFFF?text=ES' },
+const recentPlaylists = [
+  {
+    id: '1',
+    name: 'My Playlist #1',
+    songs: 47,
+    image: 'https://mosaic.scdn.co/300/ab67616d0000b2730896558a0e70c4ec6894ad5c',
+    isPublic: true
+  },
+  {
+    id: '2',
+    name: 'Liked Songs',
+    songs: 234,
+    image: 'https://misc.scdn.co/liked-songs/liked-songs-300.png',
+    isPublic: false
+  },
+  {
+    id: '3',
+    name: 'Chill Vibes',
+    songs: 89,
+    image: 'https://i.scdn.co/image/ab67616d0000b2732ee8fb6a5952d05b97aefd0a',
+    isPublic: true
+  },
+  {
+    id: '4',
+    name: 'Workout',
+    songs: 32,
+    image: 'https://i.scdn.co/image/ab67616d0000b273d0ae52a3b89b8f1a8d35cbf3',
+    isPublic: false
+  },
 ];
 
-const topGenres = ['Pop', 'Hip-Hop', 'R&B', 'Electronic', 'Rock'];
+const topArtists = [
+  { 
+    id: '1', 
+    name: 'The Weeknd', 
+    image: 'https://i.scdn.co/image/ab6761610000e5ebb99cacf8acd537820676726', 
+    followers: '87.8M',
+    isFollowing: true
+  },
+  { 
+    id: '2', 
+    name: 'Billie Eilish', 
+    image: 'https://i.scdn.co/image/ab6761610000e5eb5a00969a4698c3132a15fbb0', 
+    followers: '56.2M',
+    isFollowing: true
+  },
+  { 
+    id: '3', 
+    name: 'Drake', 
+    image: 'https://i.scdn.co/image/ab6761610000e5eb4293385d324db8558179afd9', 
+    followers: '78.9M',
+    isFollowing: false
+  },
+  { 
+    id: '4', 
+    name: 'Taylor Swift', 
+    image: 'https://i.scdn.co/image/ab6761610000e5ebe672b5f553298dcdccb0e676', 
+    followers: '89.1M',
+    isFollowing: true
+  },
+];
 
 export default function Profile() {
   const { theme } = useTheme() as { theme: ThemeState };
@@ -30,106 +83,149 @@ export default function Profile() {
       return {
         container: { backgroundColor: '#ffffff' },
         text: { color: '#000000' },
-        secondaryText: { color: '#666666' },
-        card: { backgroundColor: '#f5f5f5' },
+        secondaryText: { color: '#6a6a6a' },
+        card: { backgroundColor: '#f8f8f8' },
         sectionTitle: { color: '#000000' },
+        border: { borderColor: '#e6e6e6' },
+        headerBg: { backgroundColor: '#ffffff' },
       };
     } else if (theme.mode === 'custom') {
       return {
         container: { backgroundColor: theme.customBackground },
         text: { color: theme.customText },
         secondaryText: { color: theme.customText + '80' },
-        card: { backgroundColor: theme.customBackground === '#ffffff' ? '#f5f5f5' : '#1E1E1E' },
+        card: { backgroundColor: theme.customBackground === '#ffffff' ? '#f8f8f8' : '#1e1e1e' },
         sectionTitle: { color: theme.customText },
+        border: { borderColor: theme.customText + '20' },
+        headerBg: { backgroundColor: theme.customBackground },
       };
     } else {
       return {
         container: { backgroundColor: '#121212' },
         text: { color: '#ffffff' },
         secondaryText: { color: '#b3b3b3' },
-        card: { backgroundColor: '#282828' },
+        card: { backgroundColor: '#1e1e1e' },
         sectionTitle: { color: '#ffffff' },
+        border: { borderColor: '#2a2a2a' },
+        headerBg: { backgroundColor: '#121212' },
       };
     }
   };
 
   const dynamicStyles = getDynamicStyles();
 
-  const renderArtist = ({ item }: { item: any }) => (
-    <TouchableOpacity style={styles.artistItem}>
-      <Image source={{ uri: item.image }} style={styles.artistImage} />
-      <Text style={[styles.artistName, dynamicStyles.text]} numberOfLines={1}>{item.name}</Text>
-    </TouchableOpacity>
-  );
-
-  const renderGenre = (genre: string, index: number) => (
-    <View key={index} style={[styles.genreTag, dynamicStyles.card]}>
-      <Text style={[styles.genreText, dynamicStyles.text]}>{genre}</Text>
-    </View>
-  );
-
-  return (
-    <ScrollView style={[styles.container, dynamicStyles.container]} showsVerticalScrollIndicator={false}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Image source={{ uri: user.avatar }} style={styles.avatar} />
-        <View style={styles.userInfo}>
-          <Text style={[styles.name, dynamicStyles.text]}>{user.name}</Text>
-          <Text style={[styles.email, dynamicStyles.secondaryText]}>{user.email}</Text>
-          {user.isPremium && (
-            <View style={styles.premiumBadge}>
-              <Text style={styles.premiumText}>Premium</Text>
-            </View>
+  const renderPlaylist = (playlist: any) => (
+    <TouchableOpacity key={playlist.id} style={[styles.playlistItem, dynamicStyles.card]}>
+      <Image source={{ uri: playlist.image }} style={styles.playlistImage} />
+      <View style={styles.playlistInfo}>
+        <Text style={[styles.playlistName, dynamicStyles.text]} numberOfLines={1}>
+          {playlist.name}
+        </Text>
+        <View style={styles.playlistMeta}>
+          <Text style={[styles.playlistSongs, dynamicStyles.secondaryText]}>
+            {playlist.songs} songs
+          </Text>
+          {playlist.isPublic ? (
+            <Text style={[styles.publicTag, dynamicStyles.secondaryText]}> • Public</Text>
+          ) : (
+            <Text style={[styles.privateTag, dynamicStyles.secondaryText]}> • Private</Text>
           )}
         </View>
       </View>
+      <TouchableOpacity style={styles.moreButton}>
+        <Text style={[styles.moreButtonText, dynamicStyles.secondaryText]}>⋯</Text>
+      </TouchableOpacity>
+    </TouchableOpacity>
+  );
 
-      {/* Stats */}
-      <View style={styles.statsContainer}>
-        <View style={styles.statItem}>
-          <Text style={[styles.statNumber, dynamicStyles.text]}>{user.followers}</Text>
-          <Text style={[styles.statLabel, dynamicStyles.secondaryText]}>Followers</Text>
+  const renderArtist = (artist: any) => (
+    <TouchableOpacity key={artist.id} style={styles.artistItem}>
+      <Image source={{ uri: artist.image }} style={styles.artistImage} />
+      <View style={styles.artistInfo}>
+        <Text style={[styles.artistName, dynamicStyles.text]} numberOfLines={1}>
+          {artist.name}
+        </Text>
+        <Text style={[styles.artistFollowers, dynamicStyles.secondaryText]}>
+          {artist.followers} followers
+        </Text>
+      </View>
+      <TouchableOpacity 
+        style={[
+          styles.followButton, 
+          artist.isFollowing ? styles.followingButton : styles.notFollowingButton
+        ]}
+      >
+        <Text style={[
+          styles.followButtonText,
+          artist.isFollowing ? styles.followingText : styles.notFollowingText
+        ]}>
+          {artist.isFollowing ? 'Following' : 'Follow'}
+        </Text>
+      </TouchableOpacity>
+    </TouchableOpacity>
+  );
+
+  return (
+    <ScrollView 
+      style={[styles.container, dynamicStyles.container]} 
+      showsVerticalScrollIndicator={false}
+      bounces={true}
+    >
+      {/* Header with gradient effect */}
+      <View style={[styles.header, dynamicStyles.headerBg]}>
+        <View style={styles.profileInfo}>
+          <Image source={{ uri: user.avatar }} style={styles.avatar} />
+          <Text style={[styles.name, dynamicStyles.text]}>{user.name}</Text>
+          
+          <View style={styles.statsRow}>
+            <Text style={[styles.statsText, dynamicStyles.secondaryText]}>
+              {user.followers} followers • {user.following} following
+            </Text>
+          </View>
+
+          {user.isPremium && (
+            <View style={styles.premiumContainer}>
+              <View style={styles.premiumBadge}>
+                <Text style={styles.premiumIcon}>♦</Text>
+                <Text style={styles.premiumText}>Spotify Premium</Text>
+              </View>
+            </View>
+          )}
         </View>
-        <View style={styles.statItem}>
-          <Text style={[styles.statNumber, dynamicStyles.text]}>{user.following}</Text>
-          <Text style={[styles.statLabel, dynamicStyles.secondaryText]}>Following</Text>
-        </View>
-        <View style={styles.statItem}>
-          <Text style={[styles.statNumber, dynamicStyles.text]}>{user.joinDate}</Text>
-          <Text style={[styles.statLabel, dynamicStyles.secondaryText]}>Joined</Text>
+
+        {/* Action Buttons */}
+        <View style={styles.actionButtonsContainer}>
+          <TouchableOpacity style={[styles.actionButton, styles.followButton]}>
+            <Text style={styles.followButtonText}>Follow</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.actionButton, dynamicStyles.card]}>
+            <Text style={[styles.actionButtonText, dynamicStyles.text]}>Share</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.shuffleButton}>
+            <Text style={styles.shuffleIcon}>🔀</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
-      {/* Top Artists */}
+      {/* Recently Created Section */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Top artists this month</Text>
-        <View style={styles.artistsGrid}>
-          {topArtists.map((artist) => (
-            <TouchableOpacity key={artist.id} style={styles.artistItem}>
-              <Image source={{ uri: artist.image }} style={styles.artistImage} />
-              <Text style={[styles.artistName, dynamicStyles.text]} numberOfLines={1}>{artist.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Recently created</Text>
+        {recentPlaylists.map(renderPlaylist)}
       </View>
 
-      {/* Top Genres */}
+      {/* Top Artists Section */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Top genres</Text>
-        <View style={styles.genresContainer}>
-          {topGenres.map((genre, index) => renderGenre(genre, index))}
+        <View style={styles.sectionHeader}>
+          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Following</Text>
+          <TouchableOpacity>
+            <Text style={styles.showAllText}>Show all</Text>
+          </TouchableOpacity>
         </View>
+        {topArtists.map(renderArtist)}
       </View>
 
-      {/* Actions */}
-      <View style={styles.actionsContainer}>
-        <TouchableOpacity style={[styles.actionButton, dynamicStyles.card]}>
-          <Text style={[styles.actionButtonText, dynamicStyles.text]}>Edit Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.actionButton, styles.primaryButton]}>
-          <Text style={styles.primaryButtonText}>Share Profile</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Bottom padding */}
+      <View style={styles.bottomPadding} />
     </ScrollView>
   );
 }
@@ -140,129 +236,199 @@ const styles = StyleSheet.create({
     backgroundColor: '#121212',
   },
   header: {
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 20,
+    paddingTop: 50,
+    paddingHorizontal: 16,
+    paddingBottom: 24,
+  },
+  profileInfo: {
     alignItems: 'center',
+    marginBottom: 24,
   },
   avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginRight: 20,
-  },
-  userInfo: {
-    flex: 1,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginBottom: 16,
   },
   name: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  email: {
-    fontSize: 16,
     marginBottom: 8,
+    textAlign: 'center',
   },
-  premiumBadge: {
-    backgroundColor: '#1DB954',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    alignSelf: 'flex-start',
+  statsRow: {
+    marginBottom: 16,
   },
-  premiumText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    paddingBottom: 30,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333333',
-  },
-  statItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  statNumber: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  statLabel: {
+  statsText: {
     fontSize: 14,
     fontWeight: '400',
   },
-  section: {
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 15,
-  },
-  artistsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  artistItem: {
-    width: '48%',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  artistImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+  premiumContainer: {
     marginBottom: 8,
   },
-  artistName: {
-    fontSize: 14,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  genresContainer: {
+  premiumBadge: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  genreTag: {
-    backgroundColor: '#282828',
+    alignItems: 'center',
+    backgroundColor: '#1DB954',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
   },
-  genreText: {
-    fontSize: 14,
-    fontWeight: '500',
+  premiumIcon: {
+    color: '#000',
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginRight: 6,
   },
-  actionsContainer: {
-    paddingHorizontal: 20,
-    paddingBottom: 30,
-    gap: 12,
+  premiumText: {
+    color: '#000',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  actionButtonsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 16,
   },
   actionButton: {
-    backgroundColor: '#282828',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 25,
+    paddingHorizontal: 24,
+    paddingVertical: 8,
+    borderRadius: 20,
+    minWidth: 80,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#404040',
   },
   actionButtonText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
   },
-  primaryButton: {
+  shuffleButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: '#1DB954',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  primaryButtonText: {
-    color: '#fff',
+  shuffleIcon: {
     fontSize: 16,
+  },
+  section: {
+    paddingHorizontal: 16,
+    marginBottom: 32,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 22,
     fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  showAllText: {
+    color: '#b3b3b3',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  playlistItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  playlistImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 4,
+    backgroundColor: '#333',
+  },
+  playlistInfo: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  playlistName: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 2,
+  },
+  playlistMeta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  playlistSongs: {
+    fontSize: 13,
+  },
+  publicTag: {
+    fontSize: 13,
+  },
+  privateTag: {
+    fontSize: 13,
+  },
+  moreButton: {
+    padding: 8,
+  },
+  moreButtonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  artistItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    marginBottom: 12,
+  },
+  artistImage: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#333',
+  },
+  artistInfo: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  artistName: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 2,
+  },
+  artistFollowers: {
+    fontSize: 13,
+  },
+  followButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    minWidth: 80,
+    alignItems: 'center',
+  },
+  followingButton: {
+    borderColor: '#404040',
+    backgroundColor: 'transparent',
+  },
+  notFollowingButton: {
+    borderColor: '#ffffff',
+    backgroundColor: 'transparent',
+  },
+  followButtonText: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  followingText: {
+    color: '#b3b3b3',
+  },
+  notFollowingText: {
+    color: '#ffffff',
+  },
+  bottomPadding: {
+    height: 100,
   },
 });

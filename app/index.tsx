@@ -3,87 +3,160 @@ import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View }
 import { useTheme } from '../hooks/useTheme';
 import { ThemeState } from '../store/themeSlice';
 
-// Spotify-style data
+
 const recentlyPlayed = [
   {
     id: '1',
     title: 'Liked Songs',
     subtitle: '1,234 songs',
-    image: 'https://i.scdn.co/image/ab67616d0000b273b1a1d0f4e8d3f2e3f6b64f1d',
+    image: 'https://misc.scdn.co/liked-songs/liked-songs-300.png',
     type: 'playlist'
   },
   {
     id: '2',
-    title: 'Daily Mix 1',
-    subtitle: 'Made for you',
-    image: 'https://i.scdn.co/image/ab67616d0000b2730f528bbfc5a5d1f99afed4d6',
+    title: 'Today\'s Top Hits',
+    subtitle: 'Spotify',
+    image: 'https://i.scdn.co/image/ab67616d0000b273bb54dde68cd23e2a268ae0f5',
     type: 'playlist'
   },
   {
     id: '3',
     title: 'Discover Weekly',
-    subtitle: 'Your weekly mixtape of fresh music',
-    image: 'https://i.scdn.co/image/ab67616d0000b273ed8e47c0d01abf4b0c4b11d3',
+    subtitle: 'Your weekly mixtape',
+    image: 'https://newjams-images.scdn.co/image/ab67616d0000b273/dt/v3/discover-weekly/MjAyNC0wMS0wOFQwMDowMDowMA==',
     type: 'playlist'
   },
   {
     id: '4',
     title: 'Release Radar',
-    subtitle: 'Catch all the latest music from artists you follow',
-    image: 'https://i.scdn.co/image/ab67616d0000b2732d0c2b087bf02f2d07a4f98a',
+    subtitle: 'Catch all the latest music',
+    image: 'https://newjams-images.scdn.co/image/ab67616d0000b273/dt/v3/release-radar/MjAyNC0wMS0wOFQwMDowMDowMA==',
+    type: 'playlist'
+  },
+  {
+    id: '5',
+    title: 'Daily Mix 1',
+    subtitle: 'Made for you',
+    image: 'https://dailymix-images.scdn.co/v2/img/ab6761610000e5eb55d0265636a2e2e926804ac4/1/en/default',
     type: 'playlist'
   },
 ];
 
 const madeForYou = [
   {
-    id: '5',
-    title: 'Top Hits',
-    subtitle: 'The biggest songs right now',
-    image: 'https://i.scdn.co/image/ab67616d0000b273b1a1d0f4e8d3f2e3f6b64f1d',
-    type: 'playlist'
-  },
-  {
     id: '6',
-    title: 'Chill Vibes',
-    subtitle: 'Relaxing music for any time',
-    image: 'https://i.scdn.co/image/ab67616d0000b2730f528bbfc5a5d1f99afed4d6',
+    title: 'RapCaviar',
+    subtitle: 'New music from Kendrick Lamar, Future and more',
+    image: 'https://i.scdn.co/image/ab67616d0000b273188307e8d6b3d1f2eb5b9b9d',
     type: 'playlist'
   },
   {
     id: '7',
-    title: 'Workout Mix',
-    subtitle: 'High-energy tracks to keep you moving',
-    image: 'https://i.scdn.co/image/ab67616d0000b273ed8e47c0d01abf4b0c4b11d3',
+    title: 'Chill Hits',
+    subtitle: 'Kick back to the best new and recent chill hits.',
+    image: 'https://i.scdn.co/image/ab67616d0000b2732ee8fb6a5952d05b97aefd0a',
     type: 'playlist'
   },
   {
     id: '8',
-    title: 'Acoustic',
-    subtitle: 'Unplugged and intimate',
-    image: 'https://i.scdn.co/image/ab67616d0000b2732d0c2b087bf02f2d07a4f98a',
+    title: 'mint',
+    subtitle: 'The most comprehensive modern R&B playlist.',
+    image: 'https://i.scdn.co/image/ab67616d0000b2730c68f624641dc7d8d7e75b98',
+    type: 'playlist'
+  },
+  {
+    id: '9',
+    title: 'Beast Mode',
+    subtitle: 'Motivational rap to get you going.',
+    image: 'https://i.scdn.co/image/ab67616d0000b273d0ae52a3b89b8f1a8d35cbf3',
     type: 'playlist'
   },
 ];
 
-const quickAccess = [
-  { id: '1', title: 'Made for you', icon: '🎵' },
-  { id: '2', title: 'Recently played', icon: '🕒' },
-  { id: '3', title: 'Liked songs', icon: '❤️' },
-  { id: '4', title: 'Albums', icon: '💿' },
-  { id: '5', title: 'Artists', icon: '👤' },
-  { id: '6', title: 'Podcasts', icon: '🎙️' },
+// Top Albums section - new addition
+const topAlbums = [
+  {
+    id: '10',
+    title: 'After Hours',
+    subtitle: 'The Weeknd',
+    image: 'https://i.scdn.co/image/ab67616d0000b273ac69ac9c32797e6c8d3fd0bb',
+    type: 'album'
+  },
+  {
+    id: '11',
+    title: 'DAMN.',
+    subtitle: 'Kendrick Lamar',
+    image: 'https://i.scdn.co/image/ab67616d0000b2738b52c6b9bc4e43d873869699',
+    type: 'album'
+  },
+  {
+    id: '12',
+    title: 'folklore',
+    subtitle: 'Taylor Swift',
+    image: 'https://i.scdn.co/image/ab67616d0000b273395b7ef3c7b2b77da8a6c8c8',
+    type: 'album'
+  },
+  {
+    id: '13',
+    title: 'Certified Lover Boy',
+    subtitle: 'Drake',
+    image: 'https://i.scdn.co/image/ab67616d0000b273cd945b4e3de57edd28481a3f',
+    type: 'album'
+  },
+  {
+    id: '14',
+    title: 'Sour',
+    subtitle: 'Olivia Rodrigo',
+    image: 'https://i.scdn.co/image/ab67616d0000b2730c471c36970b9406233842a5',
+    type: 'album'
+  },
+];
+
+// Popular Artists section - new addition
+const popularArtists = [
+  {
+    id: '15',
+    title: 'The Weeknd',
+    subtitle: 'Artist • 87.8M monthly listeners',
+    image: 'https://i.scdn.co/image/ab6761610000e5ebb99cacf8acd537820676726',
+    type: 'artist'
+  },
+  {
+    id: '16',
+    title: 'Billie Eilish',
+    subtitle: 'Artist • 56.2M monthly listeners',
+    image: 'https://i.scdn.co/image/ab6761610000e5eb5a00969a4698c3132a15fbb0',
+    type: 'artist'
+  },
+  {
+    id: '17',
+    title: 'Drake',
+    subtitle: 'Artist • 78.9M monthly listeners',
+    image: 'https://i.scdn.co/image/ab6761610000e5eb4293385d324db8558179afd9',
+    type: 'artist'
+  },
+  {
+    id: '18',
+    title: 'Taylor Swift',
+    subtitle: 'Artist • 89.1M monthly listeners',
+    image: 'https://i.scdn.co/image/ab6761610000e5ebe672b5f553298dcdccb0e676',
+    type: 'artist'
+  },
+];
+
+// Updated quick access items with better album covers
+const quickAccessItems = [
+  { id: '1', title: 'Liked Songs', image: 'https://misc.scdn.co/liked-songs/liked-songs-64.png', color: '#1DB954' },
+  { id: '2', title: 'Today\'s Top Hits', image: 'https://i.scdn.co/image/ab67616d0000b273bb54dde68cd23e2a268ae0f5', color: null },
+  { id: '3', title: 'Daily Mix 1', image: 'https://dailymix-images.scdn.co/v2/img/ab6761610000e5eb55d0265636a2e2e926804ac4/1/en/default', color: null },
+  { id: '4', title: 'Discover Weekly', image: 'https://newjams-images.scdn.co/image/ab67616d0000b273/dt/v3/discover-weekly/MjAyNC0wMS0wOFQwMDowMDowMA==', color: null },
+  { id: '5', title: 'Release Radar', image: 'https://newjams-images.scdn.co/image/ab67616d0000b273/dt/v3/release-radar/MjAyNC0wMS0wOFQwMDowMDowMA==', color: null },
+  { id: '6', title: 'RapCaviar', image: 'https://i.scdn.co/image/ab67616d0000b273188307e8d6b3d1f2eb5b9b9d', color: null },
 ];
 
 export const options = {
   headerShown: false,
 };
-
-interface PlaylistItem {
-  id: string;
-  name: string;
-  image: string;
-}
 
 export default function HomePage() {
   const { theme } = useTheme() as { theme: ThemeState };
@@ -93,96 +166,191 @@ export default function HomePage() {
       return {
         container: { backgroundColor: '#ffffff' },
         text: { color: '#000000' },
-        secondaryText: { color: '#666666' },
-        card: { backgroundColor: '#f5f5f5' },
+        secondaryText: { color: '#6a6a6a' },
+        card: { backgroundColor: 'rgba(0,0,0,0.04)' },
         sectionTitle: { color: '#000000' },
+        playlistCard: { backgroundColor: 'rgba(0,0,0,0.04)' },
       };
     } else if (theme.mode === 'custom') {
       return {
         container: { backgroundColor: theme.customBackground },
         text: { color: theme.customText },
         secondaryText: { color: theme.customText + '80' },
-        card: { backgroundColor: theme.customBackground === '#ffffff' ? '#f5f5f5' : '#1E1E1E' },
+        card: { backgroundColor: theme.customBackground === '#ffffff' ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.1)' },
         sectionTitle: { color: theme.customText },
+        playlistCard: { backgroundColor: theme.customBackground === '#ffffff' ? 'rgba(0,0,0,0.04)' : '#282828' },
       };
     } else {
       return {
         container: { backgroundColor: '#121212' },
         text: { color: '#ffffff' },
         secondaryText: { color: '#b3b3b3' },
-        card: { backgroundColor: '#282828' },
+        card: { backgroundColor: 'rgba(255,255,255,0.1)' },
         sectionTitle: { color: '#ffffff' },
+        playlistCard: { backgroundColor: '#1a1a1a' },
       };
     }
   };
 
   const dynamicStyles = getDynamicStyles();
 
-  const renderQuickAccess = ({ item }: { item: any }) => (
-    <TouchableOpacity style={[styles.quickAccessItem, dynamicStyles.card]}>
-      <Text style={styles.quickAccessIcon}>{item.icon}</Text>
-      <Text style={[styles.quickAccessText, dynamicStyles.text]}>{item.title}</Text>
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  };
+
+  const renderQuickAccessItem = ({ item }: { item: any }) => (
+    <TouchableOpacity 
+      style={[styles.quickAccessItem, dynamicStyles.card]}
+      activeOpacity={0.7}
+    >
+      <Image 
+        source={{ uri: item.image }} 
+        style={[
+          styles.quickAccessImage,
+          item.color ? { backgroundColor: item.color } : null
+        ]} 
+      />
+      <Text style={[styles.quickAccessText, dynamicStyles.text]} numberOfLines={2}>
+        {item.title}
+      </Text>
     </TouchableOpacity>
   );
 
-  const renderPlaylist = ({ item }: { item: any }) => (
-    <TouchableOpacity style={styles.playlistItem}>
-      <Image source={{ uri: item.image }} style={styles.playlistImage} />
+  const renderPlaylistItem = ({ item }: { item: any }) => (
+    <TouchableOpacity 
+      style={[styles.playlistItem, dynamicStyles.playlistCard]}
+      activeOpacity={0.7}
+    >
+      <Image 
+        source={{ uri: item.image }} 
+        style={[
+          styles.playlistImage,
+          item.type === 'artist' ? styles.artistImage : null
+        ]} 
+      />
       <View style={styles.playlistInfo}>
-        <Text style={[styles.playlistTitle, dynamicStyles.text]} numberOfLines={1}>{item.title}</Text>
-        <Text style={[styles.playlistSubtitle, dynamicStyles.secondaryText]} numberOfLines={1}>{item.subtitle}</Text>
+        <Text style={[styles.playlistTitle, dynamicStyles.text]} numberOfLines={2}>
+          {item.title}
+        </Text>
+        <Text style={[styles.playlistSubtitle, dynamicStyles.secondaryText]} numberOfLines={2}>
+          {item.subtitle}
+        </Text>
       </View>
     </TouchableOpacity>
   );
 
   return (
-    <ScrollView style={[styles.container, dynamicStyles.container]} showsVerticalScrollIndicator={false}>
+    <ScrollView 
+      style={[styles.container, dynamicStyles.container]} 
+      showsVerticalScrollIndicator={false}
+      bounces={true}
+    >
       {/* Header */}
       <View style={styles.header}>
-        <Text style={[styles.greeting, dynamicStyles.text]}>Good afternoon</Text>
-        <TouchableOpacity style={styles.profileButton}>
-          <Image source={{ uri: 'https://via.placeholder.com/30x30/1DB954/FFFFFF?text=U' }} style={styles.profileImage} />
-        </TouchableOpacity>
+        <View style={styles.headerLeft}>
+          <Text style={[styles.greeting, dynamicStyles.text]}>{getGreeting()}</Text>
+        </View>
+        <View style={styles.headerRight}>
+          <TouchableOpacity style={styles.headerButton} activeOpacity={0.7}>
+            {/* <Text style={styles.headerButtonText}>🔔</Text> */}
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.headerButton} activeOpacity={0.7}>
+            {/* <Text style={styles.headerButtonText}>🕐</Text> */}
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.headerButton} activeOpacity={0.7}>
+            {/* <Text style={styles.headerButtonText}>⚙️</Text> */}
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.profileButton} activeOpacity={0.7}>
+            <Image 
+              source={{ uri: 'https://via.placeholder.com/32x32/1DB954/FFFFFF?text=U' }} 
+              style={styles.profileImage} 
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
-      {/* Quick Access */}
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Quick access</Text>
+      {/* Quick Access Grid */}
+      <View style={styles.quickAccessSection}>
         <FlatList
-          data={quickAccess}
-          renderItem={renderQuickAccess}
+          data={quickAccessItems}
+          renderItem={renderQuickAccessItem}
           keyExtractor={(item) => item.id}
-          numColumns={3}
+          numColumns={2}
           scrollEnabled={false}
           contentContainerStyle={styles.quickAccessGrid}
+          columnWrapperStyle={styles.quickAccessRow}
         />
       </View>
 
-      {/* Recently Played */}
+      {/* Recently Played Section */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Recently played</Text>
+        <View style={styles.sectionHeader}>
+          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Recently played</Text>
+        </View>
         <FlatList
           data={recentlyPlayed}
-          renderItem={renderPlaylist}
+          renderItem={renderPlaylistItem}
           keyExtractor={(item) => item.id}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.horizontalList}
+          ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
         />
       </View>
 
-      {/* Made for You */}
+      {/* Made for You Section */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Made for you</Text>
+        <View style={styles.sectionHeader}>
+          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Made for you</Text>
+        </View>
         <FlatList
           data={madeForYou}
-          renderItem={renderPlaylist}
+          renderItem={renderPlaylistItem}
           keyExtractor={(item) => item.id}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.horizontalList}
+          ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
         />
       </View>
+
+      {/* Top Albums Section */}
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Popular albums</Text>
+        </View>
+        <FlatList
+          data={topAlbums}
+          renderItem={renderPlaylistItem}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.horizontalList}
+          ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
+        />
+      </View>
+
+      {/* Popular Artists Section */}
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Text style={[styles.sectionTitle, dynamicStyles.sectionTitle]}>Popular artists</Text>
+        </View>
+        <FlatList
+          data={popularArtists}
+          renderItem={renderPlaylistItem}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.horizontalList}
+          ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
+        />
+      </View>
+
+      {/* Bottom padding for tab bar */}
+      <View style={styles.bottomPadding} />
     </ScrollView>
   );
 }
@@ -196,84 +364,129 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 20,
+    paddingHorizontal: 16,
+    paddingTop: 50,
+    paddingBottom: 24,
   },
-  greeting: {
-    fontSize: 28,
-    fontWeight: 'bold',
-  },
-  profileButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    overflow: 'hidden',
-  },
-  profileImage: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-  },
-  section: {
-    marginBottom: 30,
-  },
-  sectionTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    paddingHorizontal: 20,
-  },
-  quickAccessGrid: {
-    paddingHorizontal: 20,
-  },
-  quickAccessItem: {
+  headerLeft: {
     flex: 1,
-    backgroundColor: '#282828',
-    borderRadius: 8,
-    padding: 15,
-    margin: 5,
-    alignItems: 'center',
-    minHeight: 80,
-    justifyContent: 'center',
   },
-  quickAccessIcon: {
-    fontSize: 24,
-    marginBottom: 8,
-  },
-  quickAccessText: {
-    fontSize: 12,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  horizontalList: {
-    paddingHorizontal: 20,
-  },
-  playlistItem: {
+  headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#282828',
+    gap: 8,
+  },
+  greeting: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  headerButton: {
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerButtonText: {
+    fontSize: 20,
+  },
+  profileButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginLeft: 8,
+  },
+  profileImage: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+  },
+  quickAccessSection: {
+    paddingHorizontal: 16,
+    marginBottom: 32,
+  },
+  quickAccessGrid: {
+    gap: 8,
+  },
+  quickAccessRow: {
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  quickAccessItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 4,
+    padding: 0,
+    width: '48%',
+    height: 56,
+    overflow: 'hidden',
+  },
+  quickAccessImage: {
+    width: 56,
+    height: 56,
+    borderTopLeftRadius: 4,
+    borderBottomLeftRadius: 4,
+  },
+  quickAccessText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#ffffff',
+    marginLeft: 12,
+    flex: 1,
+    lineHeight: 16,
+  },
+  section: {
+    marginBottom: 32,
+  },
+  sectionHeader: {
+    paddingHorizontal: 16,
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  horizontalList: {
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  playlistItem: {
+    backgroundColor: '#1a1a1a',
     borderRadius: 8,
-    marginRight: 15,
     padding: 12,
-    width: 200,
+    width: 152,
+    minHeight: 200,
   },
   playlistImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 6,
-    marginRight: 12,
+    width: 128,
+    height: 128,
+    borderRadius: 8,
+    backgroundColor: '#333',
+    marginBottom: 12,
+  },
+  artistImage: {
+    borderRadius: 64, // Makes artist images circular
   },
   playlistInfo: {
     flex: 1,
   },
   playlistTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#ffffff',
     marginBottom: 4,
+    lineHeight: 18,
   },
   playlistSubtitle: {
-    fontSize: 14,
-    fontWeight: '400',
+    fontSize: 12,
+    color: '#b3b3b3',
+    lineHeight: 16,
+    flex: 1,
+  },
+  bottomPadding: {
+    height: 100,
   },
 });
