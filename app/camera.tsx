@@ -1,12 +1,12 @@
-import { Camera } from 'expo-camera';
+import Slider from '@react-native-community/slider';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImageManipulator from 'expo-image-manipulator';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
     Alert,
     Dimensions,
     Image,
     ScrollView,
-    Slider,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -35,9 +35,9 @@ const FILTERS: Filter[] = [
 ];
 
 export default function CameraScreen() {
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [cameraType, setCameraType] = useState(CameraType.back);
-  const [flashMode, setFlashMode] = useState(FlashMode.off);
+  const [permission, requestPermission] = useCameraPermissions();
+  const [cameraType, setCameraType] = useState<'back' | 'front'>('back');
+  const [flashMode, setFlashMode] = useState<'off' | 'on' | 'auto'>('off');
   const [isCapturing, setIsCapturing] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [currentFilter, setCurrentFilter] = useState<FilterType>('none');
@@ -46,32 +46,23 @@ export default function CameraScreen() {
   const [showEditing, setShowEditing] = useState(false);
   const [editedImage, setEditedImage] = useState<string | null>(null);
 
-  const cameraRef = useRef<Camera>(null);
-
-  useEffect(() => {
-    getCameraPermissions();
-  }, []);
-
-  const getCameraPermissions = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    setHasPermission(status === 'granted');
-  };
+  const cameraRef = useRef<any>(null);
 
   const toggleCameraType = () => {
-    setCameraType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
+    setCameraType(current => (current === 'back' ? 'front' : 'back'));
   };
 
   const toggleFlashMode = () => {
     setFlashMode(current => {
       switch (current) {
-        case FlashMode.off:
-          return FlashMode.on;
-        case FlashMode.on:
-          return FlashMode.auto;
-        case FlashMode.auto:
-          return FlashMode.off;
+        case 'off':
+          return 'on';
+        case 'on':
+          return 'auto';
+        case 'auto':
+          return 'off';
         default:
-          return FlashMode.off;
+          return 'off';
       }
     });
   };
@@ -107,59 +98,41 @@ export default function CameraScreen() {
       let manipulations: ImageManipulator.Action[] = [];
 
       switch (filterType) {
-        case 'grayscale':
-          manipulations = [
-            {
-              resize: { width: 800 },
-            },
-            {
-              grayscale: intensity,
-            },
-          ];
-          break;
-        case 'sepia':
-          manipulations = [
-            {
-              resize: { width: 800 },
-            },
-            {
-              sepia: intensity,
-            },
-          ];
-          break;
-        case 'vintage':
-          manipulations = [
-            {
-              resize: { width: 800 },
-            },
-            {
-              grayscale: intensity * 0.3,
-            },
-            {
-              sepia: intensity * 0.5,
-            },
-          ];
-          break;
-        case 'cool':
-          manipulations = [
-            {
-              resize: { width: 800 },
-            },
-            {
-              tint: { r: 0, g: 0, b: 255, a: intensity * 0.3 },
-            },
-          ];
-          break;
-        case 'warm':
-          manipulations = [
-            {
-              resize: { width: 800 },
-            },
-            {
-              tint: { r: 255, g: 200, b: 0, a: intensity * 0.3 },
-            },
-          ];
-          break;
+               case 'grayscale':
+                 manipulations = [
+                   {
+                     resize: { width: 800 },
+                   },
+                 ];
+                 break;
+               case 'sepia':
+                 manipulations = [
+                   {
+                     resize: { width: 800 },
+                   },
+                 ];
+                 break;
+               case 'vintage':
+                 manipulations = [
+                   {
+                     resize: { width: 800 },
+                   },
+                 ];
+                 break;
+               case 'cool':
+                 manipulations = [
+                   {
+                     resize: { width: 800 },
+                   },
+                 ];
+                 break;
+               case 'warm':
+                 manipulations = [
+                   {
+                     resize: { width: 800 },
+                   },
+                 ];
+                 break;
         default:
           manipulations = [
             {
@@ -210,7 +183,7 @@ export default function CameraScreen() {
 
   // Removed animated button style
 
-  if (hasPermission === null) {
+  if (!permission) {
     return (
       <View style={styles.container}>
         <Text style={styles.message}>Requesting camera permission...</Text>
@@ -218,11 +191,11 @@ export default function CameraScreen() {
     );
   }
 
-  if (hasPermission === false) {
+  if (!permission.granted) {
     return (
       <View style={styles.container}>
         <Text style={styles.message}>No access to camera</Text>
-        <TouchableOpacity style={styles.button} onPress={getCameraPermissions}>
+        <TouchableOpacity style={styles.button} onPress={requestPermission}>
           <Text style={styles.buttonText}>Grant Permission</Text>
         </TouchableOpacity>
       </View>
@@ -268,13 +241,12 @@ export default function CameraScreen() {
                   minimumValue={0}
                   maximumValue={1}
                   value={filterIntensity}
-                  onValueChange={(value) => {
-                    setFilterIntensity(value);
-                    applyFilter(currentFilter, value);
-                  }}
+                         onValueChange={(value: number) => {
+                           setFilterIntensity(value);
+                           applyFilter(currentFilter, value);
+                         }}
                   minimumTrackTintColor="#1DB954"
                   maximumTrackTintColor="#333333"
-                  thumbStyle={styles.sliderThumb}
                 />
                 <Text style={styles.intensityValue}>{Math.round(filterIntensity * 100)}%</Text>
               </View>
@@ -296,19 +268,18 @@ export default function CameraScreen() {
 
   return (
     <View style={styles.container}>
-      <Camera
-        ref={cameraRef}
-        style={styles.camera}
-        type={cameraType}
-        flashMode={flashMode}
-        ratio="16:9"
-      >
+             <CameraView
+               ref={cameraRef}
+               style={styles.camera}
+               facing={cameraType}
+               flash={flashMode}
+             >
         <View style={styles.cameraOverlay}>
           {/* Top Controls */}
           <View style={styles.topControls}>
             <TouchableOpacity style={styles.controlButton} onPress={toggleFlashMode}>
               <Text style={styles.controlButtonText}>
-                {flashMode === FlashMode.off ? '⚡' : flashMode === FlashMode.on ? '⚡' : '⚡'}
+                {flashMode === 'off' ? '⚡' : flashMode === 'on' ? '⚡' : '⚡'}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.controlButton} onPress={toggleCameraType}>
@@ -329,7 +300,7 @@ export default function CameraScreen() {
             </View>
           </View>
         </View>
-      </Camera>
+             </CameraView>
 
       {capturedImage && (
         <View style={styles.previewContainer}>
