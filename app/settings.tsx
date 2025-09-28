@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
@@ -16,7 +17,10 @@ export default function Settings() {
         { 
           text: "Log Out", 
           style: "destructive", 
-          onPress: () => router.replace('/Home/spotify')  // ✅ correct path
+          onPress: async () => {
+            await AsyncStorage.removeItem("isLoggedIn");
+            router.replace('/auth/spotify');
+          }
         }
       ]
     );

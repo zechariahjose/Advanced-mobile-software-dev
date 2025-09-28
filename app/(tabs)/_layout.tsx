@@ -1,38 +1,31 @@
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { withLayoutContext } from 'expo-router';
 import { Provider } from 'react-redux';
-import { store } from '../store';
+import { store } from '../../store';
 
 const DrawerNavigator = createDrawerNavigator();
 export const Drawer = withLayoutContext(DrawerNavigator.Navigator);
 
-export default function DrawerLayout() {
-  const colorScheme = useColorScheme();
-
+export default function MainLayout() {
   return (
     <Provider store={store}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Drawer
-          initialRouteName="index"   // ✅ Home is the starting point
-          screenOptions={{
-            headerShown: true,
-            drawerActiveTintColor: '#1DB954',
-            drawerInactiveTintColor: '#fff',
-            drawerStyle: { backgroundColor: '#121212' },
-            headerStyle: { backgroundColor: '#121212' },
-            headerTintColor: '#fff',
-          }}
-        >
+      <Drawer
+        screenOptions={{
+          headerShown: true,
+          drawerActiveTintColor: '#1DB954',
+          drawerInactiveTintColor: '#fff',
+          drawerStyle: { backgroundColor: '#121212' },
+          headerStyle: { backgroundColor: '#121212' },
+          headerTintColor: '#fff',
+        }}
+      >
         <Drawer.Screen name="index" options={{ title: 'Home' }} />
         <Drawer.Screen name="profile" options={{ title: 'Profile' }} />
         <Drawer.Screen name="playlists" options={{ title: 'Your Playlists' }} />
         <Drawer.Screen name="camera" options={{ title: 'Camera' }} />
         <Drawer.Screen name="theme-settings" options={{ title: 'Theme Settings' }} />
         <Drawer.Screen name="settings" options={{ title: 'Settings' }} />
-        </Drawer>
-      </ThemeProvider>
+      </Drawer>
     </Provider>
   );
 }
