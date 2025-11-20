@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
+  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -28,9 +29,12 @@ export default function Signup() {
   const router = useRouter();
 
   const handleSignup = async () => {
-    if (!email || !fullname || !password) return; // basic validation
-    await AsyncStorage.setItem("isLoggedIn", "true");
-    router.replace('/'); // go to Home after signup
+    try {
+      await AsyncStorage.setItem("isLoggedIn", "true");
+      router.replace('/index'); // go to Home after signup
+    } catch (error) {
+      Alert.alert("Error", "Failed to sign up. Please try again.");
+    }
   };
 
   return (

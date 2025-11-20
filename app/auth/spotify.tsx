@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
+  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -27,9 +28,12 @@ export default function SpotifyLogin() {
   // Removed auto-redirect - always show login screen
 
   const handleLogin = async () => {
-    if (!email || !password) return; // add your validation logic
-    await AsyncStorage.setItem("isLoggedIn", "true");
-    router.replace("/"); // go to Home
+    try {
+      await AsyncStorage.setItem("isLoggedIn", "true");
+      router.replace("/index"); // go to Home
+    } catch (error) {
+      Alert.alert("Error", "Failed to log in. Please try again.");
+    }
   };
 
   return (

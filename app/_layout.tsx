@@ -45,6 +45,12 @@ export default function DrawerLayout() {
             }} 
           />
           <Drawer.Screen 
+            name="map" 
+            options={{ 
+              title: 'Live Map'
+            }} 
+          />
+          <Drawer.Screen 
             name="theme-settings" 
             options={{ 
               title: 'Theme Settings'
